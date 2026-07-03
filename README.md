@@ -64,9 +64,9 @@ The script runs continuously, polling for new images every 60 seconds and skippi
 ---
 
 ## Downloading the models
-
-The debris and water segmentation models can be downloaded on [Hugging Face](https://huggingface.co/rvandaele/bridgemonitoring): 
 ---
+
+The debris and water segmentation models can be downloaded on [Hugging Face](https://huggingface.co/rvandaele/bridgemonitoring)
 
 ---
 
