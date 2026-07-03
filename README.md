@@ -44,7 +44,7 @@ python prediction_bridges.py \\
   --csv-dir ./logs/water \\
   --use-tiling
 ```
-
+The debris and water segmentation models can be downloaded on [Hugging Face](https://huggingface.co/rvandaele/bridgemonitoring)
 | Argument | Default | Description |
 |---|---|---|
 | `--checkpoint` | *(required)* | Path to the model weights file (`.pt`). Default should be model_weights/debris_model.pt or water_model.pt |
@@ -64,7 +64,6 @@ The script runs continuously, polling for new images every 60 seconds and skippi
 ---
 
 ## Downloading the models
----
 
 The debris and water segmentation models can be downloaded on [Hugging Face](https://huggingface.co/rvandaele/bridgemonitoring)
 
