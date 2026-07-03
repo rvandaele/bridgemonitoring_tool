@@ -1,12 +1,11 @@
 # Bridge Camera Monitor
 
-A system for monitoring bridge cameras: a GMail script extracts images from incoming emails, a deep learning script runs debris and water detection on those images, and a Streamlit dashboard displays the results.
+A system for monitoring bridge cameras: a deep learning script runs debris and water detection on images, and a Streamlit dashboard displays the results.
 
 ---
 
 ## Components
 
-- **`gmail_extractor.py`** — polls a GMail inbox, extracts image attachments, applies privacy masks, and saves images into per-camera folders.
 - **`prediction_bridges.py`** — runs a segmentation model over camera images and writes per-camera CSV files with pixel counts. Run once for debris detection and once for water detection, each with its own model weights.
 - **`streamlit_app.py`** — a Streamlit dashboard for browsing camera images and reviewing automatically computed debris/water status.
 
@@ -17,67 +16,8 @@ A system for monitoring bridge cameras: a GMail script extracts images from inco
 ### Requirements
 
 ```bash
-pip install streamlit pandas imageio google-api-python-client google-auth-oauthlib \
-            torch torchvision segmentation-models-pytorch opencv-python numpy
+pip install streamlit pandas imageio torch torchvision segmentation-models-pytorch opencv-python numpy
 ```
-
----
-
-## Gmail Credentials Setup
-
-The Gmail script authenticates via OAuth 2.0. You will need to generate a `credentials.json` file from the Google Cloud Console using the Bridge Monitoring GMail address available in the handover document.
-
-### 1. Create or open a Google Cloud project
-
-Using the GMail account, go to [console.cloud.google.com](https://console.cloud.google.com) and create a new project, or select an existing one.
-
-### 2. Enable the Gmail API
-
-- In the sidebar, go to **APIs & Services → Library**
-- Search for **Gmail API** and click **Enable**
-
-### 3. Configure the OAuth consent screen
-
-- Go to **APIs & Services → OAuth consent screen**
-- Choose **External** (or **Internal** if using a Google Workspace account)
-- Fill in the required fields (app name, support email)
-- Under **Scopes**, add `https://www.googleapis.com/auth/gmail.modify`
-- Add the Gmail account as a **test user** if staying in test mode
-
-### 4. Create OAuth credentials
-
-- Go to **APIs & Services → Credentials**
-- Click **Create Credentials → OAuth client ID**
-- Choose **Desktop app** as the application type
-- Give it a name and click **Create**
-- Download the JSON file and save it as `credentials.json` in the project root
-
-### 5. First run & token
-
-On first run, the script will open a browser window asking you to log in and grant access to the Gmail account. After authorising, a `token.pickle` file is saved locally — subsequent runs will use this automatically without re-prompting.
-
-> **Note:** If an existing `token.pickle` is available from a previous setup, it can be handed over directly to skip the browser authorisation step.
-
-> **Note:** If the OAuth consent screen is left in **test mode**, tokens expire every 7 days and require re-authorisation. To avoid this, either submit the app for Google verification, or switch to **Internal** if the account is part of a Google Workspace organisation.
-
----
-
-## Running the Gmail Extractor
-
-```bash
-python gmail_extractor.py \
-  --output-dir ./images \
-  --credentials credentials.json \
-  --mask-dir ./masks
-```
-
-| Argument | Default | Description |
-|---|---|---|
-| `--output-dir` | `./images` | Base directory where per-camera subfolders and images are stored |
-| `--credentials` | `credentials.json` | Path to the Gmail OAuth credentials file |
-| `--mask-dir` | `./masks` | Path to per-camera mask images used to hide personal data |
-
-The script polls the inbox every 60 seconds, saves new images into the appropriate camera subfolder, applies privacy masks, and moves processed emails to trash.
 
 ---
 
@@ -123,6 +63,13 @@ The script runs continuously, polling for new images every 60 seconds and skippi
 
 ---
 
+## Downloading the models
+
+The debris and water segmentation models can be downloaded on [Hugging Face](https://huggingface.co/rvandaele/bridgemonitoring): 
+---
+
+---
+
 ## Running the Dashboard
 
 ```bash
@@ -145,7 +92,7 @@ images/
 ...
 ```
 
-Each subfolder corresponds to one camera and is populated automatically by the Gmail extractor.
+Each subfolder corresponds to one camera.
 
 ---
 
